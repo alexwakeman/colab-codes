@@ -1,0 +1,61 @@
+@import "colours";
+
+@mixin apply-theme($theme-name) {
+
+  $bgColorA: $theme-0-a;
+  $bgColorB: $theme-0-b;
+  $primary: white;
+
+  @if $theme-name == theme-1 {
+    $bgColorA: $theme-1-a;
+    $bgColorB: $theme-1-b;
+    $primary: white;
+  } @else if $theme-name == theme-2 {
+    $bgColorA: $theme-2-a;
+    $bgColorB: $theme-2-b;
+    $primary: white;
+  } @else if $theme-name == theme-3 {
+    $bgColorA: $theme-3-a;
+    $bgColorB: $theme-3-b;
+    $primary: white;
+  } @else if $theme-name == theme-4 {
+    $bgColorA: $theme-4-a;
+    $bgColorB: $theme-4-b;
+    $primary: white;
+  }
+
+  .outer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    .flex {
+      display: flex;
+      height: 100%;
+
+      .left {
+        padding: 0 20px 20px 20px;
+        width: 25%;
+        background-color: rgba(50, 50, 50, 0.7);
+        color: white;
+        height: 100%;
+
+        h1 {
+          font-size: 40px;
+        }
+
+        h1, h2, h3 {
+          letter-spacing: 0.07em;
+        }
+      }
+
+      .right, .left {
+        background: $bgColorA;
+        background: -moz-linear-gradient(top, $bgColorA 0%, $bgColorB 100%);
+        background: -webkit-linear-gradient(top, $bgColorA 0%, $bgColorB 100%);
+        background: linear-gradient(to bottom, $bgColorA 0%, $bgColorB 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=$bgColorA, endColorstr=$bgColorB, GradientType=0);
+      }
+    }
+  }
+}
