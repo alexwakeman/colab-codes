@@ -1,25 +1,10 @@
-
 @import "fonts";
 @import "theme-mixin";
 
 .App {
   font-family: 'Roboto Lt', sans-serif;
 
-  &.theme-0 {
-    @include apply-theme('theme-0');
-  }
-  &.theme-1 {
-    @include apply-theme('theme-1');
-  }
-  &.theme-2 {
-    @include apply-theme('theme-2');
-  }
-  &.theme-3 {
-    @include apply-theme('theme-3');
-  }
-  &.theme-4 {
-    @include apply-theme('theme-4');
-  }
+  @include apply-theme();
 
 }
 

@@ -1,40 +1,45 @@
 import React, {createRef, useEffect} from 'react';
+import chroma from 'chroma-js';
+
 import './App.scss';
-import {colours} from './config';
 import {clamp} from './utils';
 
 function App() {
   const seed = Math.random();
   const seedB = Math.random();
   const canvasRef = createRef();
-  const width = Math.round((window.innerWidth / 4) * 3);
-  const height = window.innerHeight;
-  const R = Math.round(width / 2) / 2;
-  const r = clamp(R  * seed, 60, 400);
-  const d = clamp(R * seedB, 30, 350);
+  let height = window.innerHeight;
+  let width = Math.round((window.innerWidth / 4) * 3);
+  let R = Math.round(width / 2) / 2;
+
+
+  if (width <= 600) {
+    R = Math.round(height / 2) / 2;
+    width = window.innerWidth;
+    height = 600;
+  }
+
+  const r = clamp(R  * seed, 120, 400);
+  const d = clamp(R * seedB, 75, 650);
   const diff = R - r;
   const ratio = diff / r;
-  const thetaIncr = clamp(seed, 0.08, 0.19)
+  const thetaIncr = clamp(seed, 0.1, 0.59)
   let theta = 0.0;
   let start, ctx;
 
-  const colorIndex = clamp(Math.floor(seed * colours.length), 0, colours.length - 1);
-  const colourSet = colours[colorIndex];
-  let diffRed = Math.abs(colourSet.end.r - colourSet.start.r);
-  let diffGreen = Math.abs(colourSet.end.g - colourSet.start.g);
-  let diffBlue = Math.abs(colourSet.end.b - colourSet.start.b);
+  const colourA = chroma.random();
+  const colourB = chroma.random();
+  const scaler = chroma.scale([colourA, colourB]).domain([-1,1]).mode('lch');
 
   useEffect(() => {
     initSpiro(canvasRef.current);
   });
 
-
-
   function initSpiro(canvas) {
     ctx = canvas.getContext('2d');
     const nextEuclid = getNextLocation(theta);
     const nextCanvas = getCanvasCoords(nextEuclid.xTheta, nextEuclid.yTheta);
-    ctx.strokeStyle = `rgb(${colourSet.start.r}, ${colourSet.start.g}, ${colourSet.start.b})`;
+
     ctx.moveTo(nextCanvas.x, nextCanvas.y);
     window.requestAnimationFrame(drawStep);
   }
@@ -47,17 +52,17 @@ function App() {
     const elapsed = timestamp - start;
     const nextEuclid = getNextLocation(theta);
     const nextCanvas = getCanvasCoords(nextEuclid.xTheta, nextEuclid.yTheta);
-    const fadeAmountA = Math.cos(theta);
-    const fadeAmountB = Math.abs(Math.sin(theta));
+    const gradientA = Math.sin(theta);
+    const gradientB = Math.abs(Math.sin(theta));
+    const gradientC = Math.cos(theta);
+    const fillColour = scaler(gradientA);
+    const strokeColour = scaler(gradientC).set('lab.l', '*1.5');
 
-    diffRed = Math.round((diffRed * fadeAmountA) + colourSet.start.r);
-    diffGreen = Math.round((diffGreen * fadeAmountA) + colourSet.start.g);
-    diffBlue = Math.round((diffBlue * fadeAmountA) + colourSet.start.b);
-
-    ctx.fillStyle = `rgb(${diffRed},${diffGreen},${diffBlue})`;
+    ctx.strokeStyle = `${strokeColour}`;
+    ctx.fillStyle = `${fillColour}`;
 
     ctx.beginPath();
-    ctx.arc(nextCanvas.x, nextCanvas.y, clamp(fadeAmountB * 20, 3, 20), 0, 2 * Math.PI);
+    ctx.arc(nextCanvas.x, nextCanvas.y, clamp(gradientB * 20, 3, 20), 0, 2 * Math.PI);
     ctx.fill();
     ctx.stroke();
 
@@ -87,8 +92,39 @@ function App() {
     }
   }
 
+  function renderStyles() {
+    let textCol, bg1, bg2;
+    if (colourA.luminance() > colourB.luminance()) {
+      textCol = chroma(colourA).set('lab.l', '*1.8');
+      bg1 = chroma(colourB).set('lab.l', '*0.4');
+      bg2 = chroma(colourA).set('lab.l', '*0.5');
+    } else {
+      textCol = chroma(colourB).set('lab.l', '*1.8');
+      bg1 = chroma(colourA).set('lab.l', '*0.4');
+      bg2 = chroma(colourB).set('lab.l', '*0.5');
+    }
+
+    return (
+        <style type={'text/css'}>
+          {`.outer {
+            background: ${bg1};
+            background: -moz-linear-gradient(top, ${bg1} 0%, ${bg2} 100%);
+            background: -webkit-linear-gradient(top, ${bg1} 0%, ${bg2} 100%);
+            background: linear-gradient(to bottom, ${bg1} 0%, ${bg2} 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=${bg1}, endColorstr=${bg2}, GradientType=0);
+            color: ${textCol}; 
+          }
+          a {
+            color: ${textCol};
+          }
+          `}
+        </style>
+    )
+  }
+
   return (
-    <div className={`App ${colourSet.name}`}>
+    <div className={`App`}>
+      {renderStyles()}
       <div className={'outer'}>
         <div className={'flex'}>
           <div className={'content left'}>
@@ -96,11 +132,17 @@ function App() {
             <h2>Software Engineering & Beautiful Loops</h2>
             <p>
               My name is Alex Wakeman and I'm the director and senior engineer for Colab.Codes Ltd.
-              I offer software development services through my Personal Service Company.
+              I offer software development services through my Personal Service Company, based in London, UK.
             </p>
             <p>
-              Having worked for multi-national banks and the UK government on multiple projects, I have experience
+              Having worked with multi-national companies and the UK government on multiple projects, I have experience
               on time critical and highly complex projects - and a proven track record for delivery.
+            </p>
+            <p>
+              <a href={'https://linkedin.com/in/alexwakeman/'} target={'_blank'} rel="noopener noreferrer">LinkedIn</a>
+            </p>
+            <p>
+              &gt;&gt; <a href={'./'}>Refresh Page</a> : )
             </p>
           </div>
           <div className={'content right'}>
