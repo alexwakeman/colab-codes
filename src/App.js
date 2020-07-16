@@ -146,7 +146,7 @@ function App() {
               &gt;&gt; <a href={'./'}>Refresh Page</a> : )
             </p>
           </div>
-          <div className={'content right'}>
+          <div className={'content right'} onClick={() => window.location.reload()}>
             <canvas id={'canvas'} ref={canvasRef} width={width} height={height}/>
           </div>
         </div>
