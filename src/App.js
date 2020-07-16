@@ -139,7 +139,8 @@ function App() {
               on time critical and highly complex projects - and a proven track record for delivery.
             </p>
             <p>
-              <a href={'https://linkedin.com/in/alexwakeman/'} target={'_blank'} rel="noopener noreferrer">LinkedIn</a>
+              <a href={'https://linkedin.com/in/alexwakeman/'} target={'_blank'} rel="noopener noreferrer">LinkedIn</a><br/>
+              <a href={'https://github.com/alexwakeman'} target={'_blank'} rel="noopener noreferrer">GitHub</a><br/>
             </p>
             <p>
               &gt;&gt; <a href={'./'}>Refresh Page</a> : )
