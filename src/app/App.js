@@ -115,6 +115,9 @@ function App() {
             </p>
             <ul>
               <li>
+                <button type={'button'} onClick={() => reset()}>CHANGE IT UP! <span role='img' aria-label={'Hamburger'}>&#x1F354;</span></button>
+              </li>
+              <li>
                 <a href={'https://linkedin.com/in/alexwakeman/'} target={'_blank'} rel="noopener noreferrer">LinkedIn</a><br/>
               </li>
               <li>
@@ -122,9 +125,6 @@ function App() {
               </li>
               <li>
                 <a href={'mailto:alex@colab.codes'}>Email</a><br/>
-              </li>
-              <li>
-                <button type={'button'} onClick={() => reset()}>Refresh <span role='img' aria-label={'Hamburger'}>&#x1F354;</span></button>
               </li>
             </ul>
             <p>
