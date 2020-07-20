@@ -14,5 +14,5 @@ RUN npm ci --only=production
 RUN npm run build
 RUN npm install -g serve
 
-EXPOSE 8080
+EXPOSE 5000
 CMD [ "serve", "-s", "build" ]
