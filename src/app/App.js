@@ -95,7 +95,7 @@ function App() {
     ctx.fill();
     ctx.stroke();
 
-    if (elapsed < 60000) {
+    if (elapsed < 120000) {
       theta += thetaIncr;
       animId = window.requestAnimationFrame(drawStep);
     } else {
