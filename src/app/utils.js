@@ -6,6 +6,14 @@ export function clamp(num, min, max) {
     return Math.min(Math.max(parsed, MIN), MAX)
 }
 
+export function clampFloat(num, min, max) {
+    /* Returns number within clamp min max range */
+    const MIN = min || 1;
+    const MAX = max || 20;
+
+    return Math.min(Math.max(num, MIN), MAX)
+}
+
 export function getCanvasCoords(width, height, x, y) {
     /* Returns the canvas coords for given euclidean X, Y */
     const zeroX = Math.floor(width / 2);
