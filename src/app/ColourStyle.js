@@ -13,59 +13,75 @@ export function ColourStyle({colours, height} ) {
 
     if (colourA.luminance() > colourB.luminance()) {
         textCol = chroma(colourA).set('lab.l', '*1.8');
-        bg1 = chroma(colourB).set('lab.l', '*0.4');
-        bg2 = chroma(colourA).set('lab.l', '*0.5');
+        bg1 = chroma(colourB).set('lab.l', '*0.32');
+        bg2 = chroma(colourA).set('lab.l', '*0.58');
     } else {
         textCol = chroma(colourB).set('lab.l', '*1.8');
-        bg1 = chroma(colourA).set('lab.l', '*0.4');
-        bg2 = chroma(colourB).set('lab.l', '*0.5');
+        bg1 = chroma(colourA).set('lab.l', '*0.32');
+        bg2 = chroma(colourB).set('lab.l', '*0.58');
     }
 
     return (
         <style type={'text/css'}>
-            {`.outer {
-            background: ${bg1};
-            background: -moz-linear-gradient(top, ${bg1} 0%, ${bg2} 100%);
-            background: -webkit-linear-gradient(top, ${bg1} 0%, ${bg2} 100%);
-            background: linear-gradient(to bottom, ${bg1} 0%, ${bg2} 100%);
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=${bg1}, endColorstr=${bg2}, GradientType=0);
-            color: ${textCol}; 
-            height: 100%;
+            {`:root {
+            --hero-text: ${textCol};
+            --hero-bg-1: ${bg1};
+            --hero-bg-2: ${bg2};
+            --hero-height: ${height}px;
           }
-          .outer {
-            height: calc(${height}px);
+          body {
+            background: linear-gradient(180deg, ${bg1} 0%, ${bg2} 100%);
+            color: var(--hero-text);
           }
-          @media only screen and (max-width: 600px) {
-              .outer {
-                height: calc(${height}px + 100%);
-              }
-          }    
+          .hero {
+            color: var(--hero-text);
+            background: radial-gradient(circle at top, ${chroma(bg2).alpha(0.45)} 0%, ${chroma(bg1).alpha(0.92)} 45%, ${bg1} 100%);
+          }
+          .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, ${chroma(bg1).alpha(0.78)} 0%, ${chroma(bg2).alpha(0.62)} 100%);
+            opacity: 0.78;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            z-index: 0;
+          }
+          .hero__content,
+          .hero__content a,
+          .hero__cta .update {
+            color: var(--hero-text);
+          }
           a {
-            color: ${textCol};
+            color: var(--hero-text);
+            text-decoration: none;
+          }
+          a:hover,
+          a:focus {
+            text-decoration: underline;
           }
           .refresh-btn {
-              box-shadow:inset 0px 1px 0px 0px #fff6af;
-              background:linear-gradient(to bottom, ${bg2} 5%, ${bg1} 100%);
-              background-color:${bg2};
-              border-radius:6px;
-              border:1px solid #fff;
-              display:inline-block;
+              display:inline-flex;
+              align-items:center;
+              gap: 6px;
               cursor:pointer;
-              color:${textCol};
-              font-family:Arial;
-              font-size:15px;
-              font-weight:bold;
-              padding:6px 24px;
-              text-decoration:none;
-              text-shadow:0px 1px 0px #ffee66;
-            }
+              color:var(--hero-text);
+              font-family:'Roboto Lt', sans-serif;
+              font-size:1rem;
+              font-weight:600;
+              padding:12px 30px;
+              border-radius:999px;
+              border:1px solid ${chroma(textCol).alpha(0.35)};
+              background:linear-gradient(120deg, ${chroma(bg2).brighten(0.4).alpha(0.85)} 0%, ${chroma(bg1).alpha(0.9)} 100%);
+              box-shadow:0 12px 30px ${chroma(bg1).alpha(0.45)};
+              transition: transform 160ms ease, box-shadow 160ms ease;
+          }
           .refresh-btn:hover {
-              background:linear-gradient(to bottom, ${bg1} 5%, ${bg2} 100%);
-              background-color:${bg1};
+              transform: translateY(-2px) scale(1.01);
+              box-shadow:0 18px 36px ${chroma(bg2).alpha(0.45)};
           }
           .refresh-btn:active {
-              position:relative;
-              top:1px;
+              transform: translateY(0);
           }
           `}
         </style>
